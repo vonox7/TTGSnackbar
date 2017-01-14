@@ -71,9 +71,6 @@ class ViewController: UIViewController {
         // Change corner radius
         snackbar.cornerRadius = 2
         
-        // Change separate line back color
-        snackbar.separateViewBackgroundColor = .yellow
-        
         snackbar.animationType = animationTypes[animationTypeSegmented!.selectedSegmentIndex]
         snackbar.show()
     }
@@ -107,11 +104,6 @@ class ViewController: UIViewController {
         snackbar.actionText = "Yes"
         snackbar.actionTextColor = UIColor.green
         snackbar.actionBlock = { (snackbar) in self.outputLabel?.text = "Click Yes !"}
-        
-        // Action 2
-        snackbar.secondActionText = "No"
-        snackbar.secondActionTextColor = UIColor.yellow
-        snackbar.secondActionBlock = { (snackbar) in self.outputLabel?.text = "Click No !"}
         
         snackbar.animationType = animationTypes[animationTypeSegmented!.selectedSegmentIndex]
         snackbar.show()
