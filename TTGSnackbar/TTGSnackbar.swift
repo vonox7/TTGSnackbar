@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Darwin
 
 // MARK: -
 // MARK: Enum
