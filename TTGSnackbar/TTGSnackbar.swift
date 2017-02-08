@@ -67,6 +67,9 @@ open class TTGSnackbar: UIView {
     
     /// Snackbar icon imageView default width
     fileprivate static let snackbarIconImageViewWidth: CGFloat = 32
+ 
+    /// Snackbar message Label default width
+    fileprivate static let snackbarmessageLabelWidth: CGFloat = 32
     
     // MARK: -
     // MARK: Typealias
@@ -267,6 +270,7 @@ open class TTGSnackbar: UIView {
     
     // Content constraints.
     fileprivate var iconImageViewWidthConstraint: NSLayoutConstraint? = nil
+    fileprivate var messageLabelWidthConstraint: NSLayoutConstraint? = nil
     fileprivate var actionButtonWidthConstraint: NSLayoutConstraint? = nil
     
     fileprivate var contentViewLeftConstraint: NSLayoutConstraint? = nil
@@ -372,12 +376,16 @@ public extension TTGSnackbar {
     /**
      Show the snackbar.
      */
-    public func show() {
+    public func show(onView: UIView? = nil) {
         // Only show once
         if self.superview != nil {
             return
         }
-        
+     
+        if onView != nil {
+          containerView = onView!
+        }
+     
         // Create dismiss timer
         dismissTimer = Timer.scheduledTimer(timeInterval: (TimeInterval)(duration.rawValue),
                                             target: self, selector: #selector(dismiss), userInfo: nil, repeats: false)
@@ -720,6 +728,11 @@ private extension TTGSnackbar {
         iconImageViewWidthConstraint = NSLayoutConstraint.init(
             item: iconImageView, attribute: .width, relatedBy: .equal,
             toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: TTGSnackbar.snackbarIconImageViewWidth)
+     
+        messageLabelWidthConstraint = NSLayoutConstraint.init(
+          item: messageLabel, attribute: .width, relatedBy: .greaterThanOrEqual,
+          toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: TTGSnackbar.snackbarmessageLabelWidth)
+        messageLabelWidthConstraint?.priority = 250
         
         actionButtonWidthConstraint = NSLayoutConstraint.init(
             item: actionButton, attribute: .width, relatedBy: .greaterThanOrEqual,
@@ -737,6 +750,7 @@ private extension TTGSnackbar {
         
         iconImageView.addConstraint(iconImageViewWidthConstraint!)
         actionButton.addConstraint(actionButtonWidthConstraint!)
+        messageLabel.addConstraint(messageLabelWidthConstraint!)
         
         contentView.addConstraints(hConstraints)
         contentView.addConstraints(vConstraintsForIconImageView)
@@ -744,6 +758,8 @@ private extension TTGSnackbar {
         contentView.addConstraints(vConstraintsForActionButton)
         contentView.addConstraint(vConstraintForActivityIndicatorView)
         contentView.addConstraints(hConstraintsForActivityIndicatorView)
+        contentView.updateConstraintsIfNeeded()
+        contentView.layoutIfNeeded()
         
         self.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
     }
