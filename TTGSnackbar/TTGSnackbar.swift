@@ -773,7 +773,7 @@ private extension TTGSnackbar {
         messageLabel.textColor = UIColor.white
         messageLabel.font = messageTextFont
         messageLabel.backgroundColor = UIColor.clear
-        messageLabel.lineBreakMode = .byTruncatingTail
+        messageLabel.lineBreakMode = .byWordWrapping
         messageLabel.numberOfLines = 0;
         messageLabel.textAlignment = .left
         messageLabel.text = message
@@ -844,7 +844,7 @@ private extension TTGSnackbar {
             toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: TTGSnackbar.snackbarIconImageViewWidth)
         
         actionButtonWidthConstraint = NSLayoutConstraint.init(
-            item: actionButton, attribute: .width, relatedBy: .equal,
+            item: actionButton, attribute: .width, relatedBy: .greaterThanOrEqual,
             toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: TTGSnackbar.snackbarActionButtonMinWidth)
         
         actionButtonMaxWidthConstraint = NSLayoutConstraint.init(
@@ -866,6 +866,8 @@ private extension TTGSnackbar {
             views: ["activityIndicatorView": activityIndicatorView])
         
         iconImageView.addConstraint(iconImageViewWidthConstraint!)
+        actionButton.addConstraint(actionButtonWidthConstraint!)
+        
         actionButton.addConstraint(actionButtonMaxWidthConstraint!)
         secondActionButton.addConstraint(secondActionButtonMaxWidthConstraint!)
 
