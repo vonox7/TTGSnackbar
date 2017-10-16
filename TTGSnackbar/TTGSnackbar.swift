@@ -132,7 +132,7 @@ open class TTGSnackbar: UIView {
     }
     
     /// Left margin. Default is 4
-    open dynamic var leftMargin: CGFloat = 0 {
+    @objc open dynamic var leftMargin: CGFloat = 0 {
         didSet {
             leftMarginConstraint?.constant = leftMargin
             superview?.layoutIfNeeded()
@@ -140,7 +140,7 @@ open class TTGSnackbar: UIView {
     }
     
     /// Right margin. Default is 4
-    open dynamic var rightMargin: CGFloat = 0 {
+    @objc open dynamic var rightMargin: CGFloat = 0 {
         didSet {
             rightMarginConstraint?.constant = -rightMargin
             superview?.layoutIfNeeded()
@@ -148,7 +148,7 @@ open class TTGSnackbar: UIView {
     }
     
     /// Bottom margin. Default is 4, only work when snackbar is at bottom
-    open dynamic var bottomMargin: CGFloat = 0 {
+   @objc open dynamic var bottomMargin: CGFloat = 0 {
         didSet {
             bottomMarginConstraint?.constant = -bottomMargin
             superview?.layoutIfNeeded()
@@ -156,7 +156,7 @@ open class TTGSnackbar: UIView {
     }
     
     /// Top margin. Default is 4, only work when snackbar is at top
-    open dynamic var topMargin: CGFloat = 0 {
+    @objc open dynamic var topMargin: CGFloat = 0 {
         didSet {
             topMarginConstraint?.constant = topMargin
             superview?.layoutIfNeeded()
@@ -164,7 +164,7 @@ open class TTGSnackbar: UIView {
     }
     
     /// Content inset. Default is (0, 4, 0, 4)
-    open dynamic var contentInset: UIEdgeInsets = UIEdgeInsets.init(top: 0, left: 16, bottom: 0, right: 16) {
+    @objc open dynamic var contentInset: UIEdgeInsets = UIEdgeInsets.init(top: 0, left: 16, bottom: 0, right: 16) {
         didSet {
             contentViewTopConstraint?.constant = contentInset.top
             contentViewBottomConstraint?.constant = -contentInset.bottom
@@ -220,7 +220,7 @@ open class TTGSnackbar: UIView {
     /// Second action button title.
     @objc open dynamic var secondActionText: String = "" {
         didSet {
-            secondActionButton.setTitle(secondActionText, for: UIControlState())
+//            secondActionButton.setTitle(secondActionText, for: UIControlState())
         }
     }
 
@@ -234,7 +234,7 @@ open class TTGSnackbar: UIView {
     /// Second action button title color. Default is white.
     @objc open dynamic var secondActionTextColor: UIColor = UIColor.white {
         didSet {
-            secondActionButton.setTitleColor(secondActionTextColor, for: UIControlState())
+//            secondActionButton.setTitleColor(secondActionTextColor, for: UIControlState())
         }
     }
 
@@ -248,7 +248,7 @@ open class TTGSnackbar: UIView {
     /// Second action text font. Default is Bold system font (14).
     @objc open dynamic var secondActionTextFont: UIFont = UIFont.boldSystemFont(ofSize: 14) {
         didSet {
-            secondActionButton.titleLabel?.font = secondActionTextFont
+//            secondActionButton.titleLabel?.font = secondActionTextFont
         }
     }
     
@@ -257,7 +257,7 @@ open class TTGSnackbar: UIView {
         didSet {
             actionMaxWidth = actionMaxWidth < 44 ? 44 : actionMaxWidth
             actionButtonMaxWidthConstraint?.constant = actionButton.isHidden ? 0 : actionMaxWidth
-            secondActionButtonMaxWidthConstraint?.constant = secondActionButton.isHidden ? 0 : actionMaxWidth
+//            secondActionButtonMaxWidthConstraint?.constant = secondActionButton.isHidden ? 0 : actionMaxWidth
             layoutIfNeeded()
         }
     }
@@ -266,7 +266,7 @@ open class TTGSnackbar: UIView {
     @objc open dynamic var actionTextNumberOfLines: Int = 1 {
         didSet {
             actionButton.titleLabel?.numberOfLines = actionTextNumberOfLines
-            secondActionButton.titleLabel?.numberOfLines = actionTextNumberOfLines
+//            secondActionButton.titleLabel?.numberOfLines = actionTextNumberOfLines
             layoutIfNeeded()
         }
     }
@@ -294,7 +294,7 @@ open class TTGSnackbar: UIView {
     /// SeparateView background color
     @objc open dynamic var separateViewBackgroundColor: UIColor = UIColor.gray {
         didSet {
-            separateView.backgroundColor = separateViewBackgroundColor
+//            separateView.backgroundColor = separateViewBackgroundColor
         }
     }
     
@@ -489,14 +489,14 @@ public extension TTGSnackbar {
         iconImageView.isHidden = icon == nil
         
         actionButton.isHidden = (actionIcon == nil || actionText.isEmpty) == false || actionBlock == nil
-        secondActionButton.isHidden = secondActionText.isEmpty || secondActionBlock == nil
-        
-        separateView.isHidden = actionButton.isHidden
-        
+//        secondActionButton.isHidden = secondActionText.isEmpty || secondActionBlock == nil
+
+//        separateView.isHidden = actionButton.isHidden
+
         iconImageViewWidthConstraint?.constant = iconImageView.isHidden ? 0 : TTGSnackbar.snackbarIconImageViewWidth
         actionButtonMaxWidthConstraint?.constant = actionButton.isHidden ? 0 : actionMaxWidth
-        secondActionButtonMaxWidthConstraint?.constant = secondActionButton.isHidden ? 0 : actionMaxWidth
-        
+//        secondActionButtonMaxWidthConstraint?.constant = secondActionButton.isHidden ? 0 : actionMaxWidth
+
         // Content View
         let finalContentView = customContentView ?? contentView
         finalContentView?.translatesAutoresizingMaskIntoConstraints = false
@@ -665,7 +665,7 @@ public extension TTGSnackbar {
         activityIndicatorView.stopAnimating()
         
         let superViewWidth = (superview?.frame)!.width
-        let snackbarHeight = TTGSnackbar.getSnackbarIntrinsicHeight(snackbar: self)
+        let snackbarHeight = frame.size.height
         
         if !animated {
             dismissBlock?(self)
@@ -800,22 +800,22 @@ private extension TTGSnackbar {
         actionButton.addTarget(self, action: #selector(doAction(_:)), for: .touchUpInside)
         contentView.addSubview(actionButton)
 
-        secondActionButton = UIButton()
-        secondActionButton.translatesAutoresizingMaskIntoConstraints = false
-        secondActionButton.backgroundColor = UIColor.clear
-        secondActionButton.contentEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 4)
-        secondActionButton.titleLabel?.font = secondActionTextFont
-        secondActionButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        secondActionButton.titleLabel?.numberOfLines = actionTextNumberOfLines
-        secondActionButton.setTitle(secondActionText, for: UIControlState())
-        secondActionButton.setTitleColor(secondActionTextColor, for: UIControlState())
-        secondActionButton.addTarget(self, action: #selector(doAction(_:)), for: .touchUpInside)
-        contentView.addSubview(secondActionButton)
+//        secondActionButton = UIButton()
+//        secondActionButton.translatesAutoresizingMaskIntoConstraints = false
+//        secondActionButton.backgroundColor = UIColor.clear
+//        secondActionButton.contentEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 4)
+//        secondActionButton.titleLabel?.font = secondActionTextFont
+//        secondActionButton.titleLabel?.adjustsFontSizeToFitWidth = true
+//        secondActionButton.titleLabel?.numberOfLines = actionTextNumberOfLines
+//        secondActionButton.setTitle(secondActionText, for: UIControlState())
+//        secondActionButton.setTitleColor(secondActionTextColor, for: UIControlState())
+//        secondActionButton.addTarget(self, action: #selector(doAction(_:)), for: .touchUpInside)
+//        contentView.addSubview(secondActionButton)
 
-        separateView = UIView()
-        separateView.translatesAutoresizingMaskIntoConstraints = false
-        separateView.backgroundColor = separateViewBackgroundColor
-        contentView.addSubview(separateView)
+//        separateView = UIView()
+//        separateView.translatesAutoresizingMaskIntoConstraints = false
+//        separateView.backgroundColor = separateViewBackgroundColor
+//        contentView.addSubview(separateView)
 
         activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -854,7 +854,7 @@ private extension TTGSnackbar {
         messageLabelWidthConstraint = NSLayoutConstraint.init(
           item: messageLabel, attribute: .width, relatedBy: .greaterThanOrEqual,
           toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: TTGSnackbar.snackbarmessageLabelWidth)
-        messageLabelWidthConstraint?.priority = 250
+      messageLabelWidthConstraint?.priority = UILayoutPriority(rawValue: 250)
         
         actionButtonWidthConstraint = NSLayoutConstraint.init(
             item: actionButton, attribute: .width, relatedBy: .greaterThanOrEqual,
@@ -864,9 +864,9 @@ private extension TTGSnackbar {
             item: actionButton, attribute: .width, relatedBy: .lessThanOrEqual,
             toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: actionMaxWidth)
 
-        secondActionButtonMaxWidthConstraint = NSLayoutConstraint.init(
-            item: secondActionButton, attribute: .width, relatedBy: .lessThanOrEqual,
-            toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: actionMaxWidth)
+//        secondActionButtonMaxWidthConstraint = NSLayoutConstraint.init(
+//            item: secondActionButton, attribute: .width, relatedBy: .lessThanOrEqual,
+//            toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: actionMaxWidth)
 
         let vConstraintForActivityIndicatorView = NSLayoutConstraint.init(
             item: activityIndicatorView, attribute: .centerY, relatedBy: .equal,
@@ -883,7 +883,7 @@ private extension TTGSnackbar {
         messageLabel.addConstraint(messageLabelWidthConstraint!)
         
         actionButton.addConstraint(actionButtonMaxWidthConstraint!)
-        secondActionButton.addConstraint(secondActionButtonMaxWidthConstraint!)
+//        secondActionButton.addConstraint(secondActionButtonMaxWidthConstraint!)
 
         contentView.addConstraints(hConstraints)
         contentView.addConstraints(vConstraintsForIconImageView)
@@ -899,9 +899,9 @@ private extension TTGSnackbar {
         
         actionButton.setContentHuggingPriority(UILayoutPriority(998), for: .horizontal)
         actionButton.setContentCompressionResistancePriority(UILayoutPriority(999), for: .horizontal)
-        secondActionButton.setContentHuggingPriority(UILayoutPriority(998), for: .horizontal)
-        secondActionButton.setContentCompressionResistancePriority(UILayoutPriority(999), for: .horizontal)
-     
+//        secondActionButton.setContentHuggingPriority(UILayoutPriority(998), for: .horizontal)
+//        secondActionButton.setContentCompressionResistancePriority(UILayoutPriority(999), for: .horizontal)
+
         // add gesture recognizers
         // tap gesture
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didTapSelf)))
@@ -972,38 +972,39 @@ private extension TTGSnackbar {
 // MARK: - Rotation notification
 
 private extension TTGSnackbar {
-    @objc func onScreenRotateNotification() {
-        messageLabel.preferredMaxLayoutWidth = messageLabel.frame.size.width
-        layoutIfNeeded()
+  @objc func onScreenRotateNotification() {
+    messageLabel.preferredMaxLayoutWidth = messageLabel.frame.size.width
+    layoutIfNeeded()
     
-    private static let twinMessageLabel = UILabel()
+    let twinMessageLabel = UILabel()
     
-    static func getSnackbarIntrinsicHeight(snackbar: TTGSnackbar) -> CGFloat {
-        var height: CGFloat = 0
-        
-        if let customContentView = snackbar.customContentView {
-            height = customContentView.frame.size.height + snackbar.contentInset.top + snackbar.contentInset.bottom
-            
-        } else {
-            twinMessageLabel.font = snackbar.messageLabel.font
-            twinMessageLabel.lineBreakMode = snackbar.messageLabel.lineBreakMode
-            twinMessageLabel.numberOfLines = snackbar.messageLabel.numberOfLines
-            twinMessageLabel.textAlignment = snackbar.messageLabel.textAlignment
-            twinMessageLabel.text = snackbar.messageLabel.text
-            
-            var width = UIScreen.main.bounds.size.width
-            width -= snackbar.leftMargin + snackbar.rightMargin
-            width -= snackbar.contentInset.left + snackbar.contentInset.right
-            width -= (snackbar.iconImageViewWidthConstraint?.constant)!
-            width -= (snackbar.actionButtonWidthConstraint?.constant)!
-            width -= 2 * 3
-            
-            twinMessageLabel.preferredMaxLayoutWidth = width
-            twinMessageLabel.sizeToFit()
-            
-            height = twinMessageLabel.frame.size.height + snackbar.contentInset.top + snackbar.contentInset.bottom
-        }
-        
-        return max(height, TTGSnackbar.snackbarMinHeight)
+    func getSnackbarIntrinsicHeight(snackbar: TTGSnackbar) -> CGFloat {
+      var height: CGFloat = 0
+
+      if let customContentView = snackbar.customContentView {
+        height = customContentView.frame.size.height + snackbar.contentInset.top + snackbar.contentInset.bottom
+
+      } else {
+        twinMessageLabel.font = snackbar.messageLabel.font
+        twinMessageLabel.lineBreakMode = snackbar.messageLabel.lineBreakMode
+        twinMessageLabel.numberOfLines = snackbar.messageLabel.numberOfLines
+        twinMessageLabel.textAlignment = snackbar.messageLabel.textAlignment
+        twinMessageLabel.text = snackbar.messageLabel.text
+
+        var width = UIScreen.main.bounds.size.width
+        width -= snackbar.leftMargin + snackbar.rightMargin
+        width -= snackbar.contentInset.left + snackbar.contentInset.right
+        width -= (snackbar.iconImageViewWidthConstraint?.constant)!
+        width -= (snackbar.actionButtonWidthConstraint?.constant)!
+        width -= 2 * 3
+
+        twinMessageLabel.preferredMaxLayoutWidth = width
+        twinMessageLabel.sizeToFit()
+
+        height = twinMessageLabel.frame.size.height + snackbar.contentInset.top + snackbar.contentInset.bottom
+      }
+
+      return max(height, TTGSnackbar.snackbarMinHeight)
     }
+  }
 }
